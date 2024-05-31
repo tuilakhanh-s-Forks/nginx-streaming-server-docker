@@ -1,12 +1,14 @@
 ARG FFMPEG_VERSION=7.0
 ARG NGINX_VERSION=1.26.0
 ARG NGINX_RTMP_VERSION=master
+ARG NGINX_VOD_VERSION=1.33
 
 ##############################
 # Build the NGINX-build image.
 FROM debian:bookworm-slim as nginx-build
 ARG NGINX_VERSION
 ARG NGINX_RTMP_VERSION
+ARG NGINX_VOD_VERSION
 ARG MAKEFLAGS="-j16"
 
 # Build dependencies.
@@ -36,12 +38,18 @@ RUN wget https://github.com/winshining/nginx-http-flv-module/archive/${NGINX_RTM
   tar zxf ${NGINX_RTMP_VERSION}.tar.gz && \
   rm ${NGINX_RTMP_VERSION}.tar.gz
 
+# Get nginx-vod module.
+RUN wget https://github.com/kaltura/nginx-vod-module/archive/${NGINX_VOD_VERSION}.tar.gz && \
+  tar zxf ${NGINX_VOD_VERSION}.tar.gz && \
+  rm ${NGINX_VOD_VERSION}.tar.gz
+
 # Compile nginx with nginx-rtmp module.
 WORKDIR /tmp/nginx-${NGINX_VERSION}
 RUN \
   ./configure \
     --prefix=/usr/local/nginx \
     --add-module=/tmp/nginx-http-flv-module-${NGINX_RTMP_VERSION} \
+    --add-module=/tmp/nginx-vod-module-${NGINX_VOD_VERSION} \
     --conf-path=/etc/nginx/nginx.conf \
     --error-log-path=/var/log/nginx/error.log \
     --pid-path=/var/run/nginx/nginx.pid \
@@ -101,8 +109,5 @@ COPY static /www/static
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
-
-EXPOSE 1935
-EXPOSE 80
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

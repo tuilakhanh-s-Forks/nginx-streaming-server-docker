@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Live Streaming </title>
+    <link href="https://www.unpkg.com/videojs-hls-quality-selector@2.0.0/dist/videojs-hls-quality-selector.css" rel="stylesheet">
+    <link href="https://unpkg.com/video.js@8.14.0/dist/alt/video-js-cdn.css" rel="stylesheet">
+</head>
+
+<body>
+    <div id="player">
+        <video id="videoPlayer" class="video-js vjs-default-skin" controls muted poster="/testscreen.png"></video>
+    </div>
+
+    <script src="https://unpkg.com/video.js@8.14.0/dist/alt/video.core.js"></script>
+    <script src="https://unpkg.com/@videojs/http-streaming@3.13.0/dist/videojs-http-streaming.js"></script>
+    <script src="https://unpkg.com/videojs-contrib-quality-levels@4.1.0/dist/videojs-contrib-quality-levels.js"></script>
+    <script src="https://unpkg.com/videojs-hls-quality-selector@2.0.0/dist/videojs-hls-quality-selector.js"></script>
+
+    <script>
+        const stream = document.URL.split("/").pop();
+        document.title += ": " + stream;
+        const url = window.location.origin + "/hls/" + stream + ".m3u8";
+    
+        const player = videojs('videoPlayer'); 
+        player.src({ src: url, type: "application/x-mpegURL" });
+        player.hlsQualitySelector();
+    
+        player.on('error', function(event) {
+          const error = player.error(); 
+          if (error && error.code === 4) { // MEDIA_ERR_SRC_NOT_SUPPORTED
+            console.log("Media Load 404");
+            document.getElementById('player').innerHTML = '<img src="/testscreen.png" />';
+            setTimeout(() => { location.reload(); }, 30000);
+          } else {
+            console.log(error); 
+            document.getElementById('player').innerHTML = '<img src="/testscreen.png" />';
+            setTimeout(() => { location.reload(); }, 30000);
+          }
+        });
+      </script>
+</body>
+
+</html>
