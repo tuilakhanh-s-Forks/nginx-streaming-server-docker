@@ -67,6 +67,14 @@ RUN \
   make install && \
   rm -rf /tmp/*
 
+
+##########################
+# Build go server
+FROM golang:1.20-alpine as go-server
+WORKDIR /app
+COPY go-server/ .
+RUN go build -o server main.go
+
 ##########################
 # Build the release image.
 FROM debian:bookworm-slim
@@ -96,6 +104,7 @@ RUN ffmpeg -version
 
 COPY --from=nginx-build /usr/local/nginx /usr/local/nginx
 COPY --from=nginx-build /etc/nginx /etc/nginx
+COPY --from=go-server /app/server /usr/local/bin/server
 
 # Add NGINX path, config and static files.
 ENV PATH "${PATH}:/usr/local/nginx/sbin"
@@ -104,10 +113,17 @@ RUN mkdir /var/log/nginx && \
   mkdir /var/lock/nginx && \
   mkdir /tmp/nginx-client-body && \
   mkdir /www
+  # mkdir /data/records/
 
 COPY static /www/static
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+COPY entrypoint.sh /
+
+RUN chmod +x /entrypoint.sh
+
+CMD ["chown" "-R" "nobody" "/data"]
+
+ENTRYPOINT ["/entrypoint.sh"]

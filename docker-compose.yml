@@ -9,8 +9,8 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - data:/data
-    entrypoint: |
-        /bin/sh -c "chown nobody /data && exec nginx -g 'daemon off;'"
+    # entrypoint: |
+    #     /bin/sh -c "chown nobody /data && exec nginx -g 'daemon off; && exec /usr/local/bin/server'"
 
 volumes:
   data:
