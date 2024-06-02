@@ -2,14 +2,57 @@
 <html>
 
 <head>
-    <title>Live Streaming </title>
+    <title> Live Streaming </title>
     <link href="https://www.unpkg.com/videojs-hls-quality-selector@2.0.0/dist/videojs-hls-quality-selector.css" rel="stylesheet">
     <link href="https://unpkg.com/video.js@8.14.0/dist/alt/video-js-cdn.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">  
+
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            font-family: 'Open Sans', sans-serif;
+            color: #E6E6FA; /* Light text color */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .video-title {
+            text-align: center;
+            width: 70%;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 92%;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .video-wrapper {
+            width: 80%; 
+            max-width: 1000px; 
+        }
+    </style>
 </head>
 
 <body>
-    <div id="player">
+    <div class="video-title"> <h1> Live Streaming </h1>
+
+    
+    <div class="container">
+      <div id="video-wrapper">
         <video id="videoPlayer" class="video-js vjs-default-skin" controls muted poster="/testscreen.png"></video>
+      </div>
     </div>
 
     <script src="https://unpkg.com/video.js@8.14.0/dist/alt/video.core.js"></script>
@@ -20,6 +63,7 @@
     <script>
         const stream = document.URL.split("/").pop();
         document.title += ": " + stream;
+        document.querySelector('.video-title h1').innerText += ": " + stream;
         const url = window.location.origin + "/hls/" + stream + ".m3u8";
     
         const player = videojs('videoPlayer'); 

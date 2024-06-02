@@ -6,14 +6,62 @@
     <link href="https://www.unpkg.com/videojs-hls-quality-selector@2.0.0/dist/videojs-hls-quality-selector.css" rel="stylesheet">
     <link href="https://unpkg.com/video.js@8.14.0/dist/alt/video-js-cdn.css" rel="stylesheet">
     <link href="https://unpkg.com/videojs-playlist-ui@5.0.0/dist/videojs-playlist-ui.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">  
+
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            font-family: 'Open Sans', sans-serif;
+            color: #E6E6FA; /* Light text color */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .video-title {
+            text-align: center;
+            width: 70%;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 92%;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .video-wrapper {
+            width: 80%; 
+            max-width: 1000px; 
+        }
+
+        .playlist-wrapper {
+            flex: 1;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="player">
-        <video id="videoPlayer" class="video-js vjs-big-play-centered" controls muted poster="/testscreen.png"></video>
-    </div>
+    <div class="video-title"> <h1>Record VOD </h1>
 
-    <div class="vjs-playlist"></div>
+    <div class="container">
+        <div id="video-wrapper">
+            <video id="videoPlayer" class="video-js" controls muted poster="/testscreen.png"></video>
+        </div>
+
+        <div class="playlist-wrapper">
+          <ol class="vjs-playlist"></ol>
+        </div>
+    </div>
 
     <script src="https://unpkg.com/video.js@8.14.0/dist/alt/video.core.js"></script>
     <script src="https://unpkg.com/@videojs/http-streaming@3.13.0/dist/videojs-http-streaming.js"></script>
@@ -27,6 +75,7 @@
 
         const record = document.URL.split("/").pop();
         document.title += ": " + record;
+        document.querySelector('.video-title h1').innerText += ": " + record;
 
         fetch('/get/records/' + record + '/')
             .then(response => response.json())
