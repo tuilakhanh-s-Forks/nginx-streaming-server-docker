@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+
+<head>
+    <title> Live Streaming </title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">  
+
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            font-family: 'Open Sans', sans-serif;
+            color: #E6E6FA; /* Light text color */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .video-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .video-wrapper {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="video-title"> <h1> Live Streaming </h1>
+
+    
+    <div class="container">
+      <div id="video-wrapper">
+        <video id="videoPlayer"></video>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/flv.js@1.6.2/dist/flv.min.js"></script>
+
+
+    <script>
+        const stream = document.URL.split("/").pop();
+        document.title += ": " + stream;
+        document.querySelector('.video-title h1').innerText += ": " + stream;
+        const url = window.location.origin + "/live?port=1935&app=stream&stream=" + stream + "/";
+    
+        if (flvjs.isSupported()) {
+            var videoElement = document.getElementById('videoPlayer');
+            var flvPlayer = flvjs.createPlayer({
+                type: 'flv',
+                isLive: true, 
+                url: url 
+            });
+            flvPlayer.attachMediaElement(videoElement);
+            flvPlayer.load(); 
+            flvPlayer.play(); 
+        } else {
+            console.error("Your browser doesn't support flv.js or live streaming.");
+        }
+    </script>
+</body>
+
+</html>

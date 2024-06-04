@@ -1,3 +1,4 @@
 #!/bin/sh
 
-/usr/local/bin/server & nginx -g "daemon off;"
+nohup nginx -g "daemon off;" 2>&1 &
+exec /usr/local/bin/server

@@ -25,27 +25,25 @@
 
         .video-title {
             text-align: center;
-            width: 70%;
             font-size: 2em;
             margin-bottom: 20px;
         }
 
         .container {
-            width: 92%;
-            flex: 1;
+            width: 100%;
+            height: auto;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            padding: 20px;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
         .video-wrapper {
-            width: 80%; 
-            max-width: 1000px; 
+            width: 100%;
         }
 
         .playlist-wrapper {
-            flex: 1;
+            align-items: center;
         }
     </style>
 </head>
@@ -57,10 +55,10 @@
         <div id="video-wrapper">
             <video id="videoPlayer" class="video-js" controls muted poster="/testscreen.png"></video>
         </div>
+    </div>
 
-        <div class="playlist-wrapper">
-          <ol class="vjs-playlist"></ol>
-        </div>
+    <div class="playlist-wrapper">
+        <ol class="vjs-playlist"></ol>
     </div>
 
     <script src="https://unpkg.com/video.js@8.14.0/dist/alt/video.core.js"></script>
@@ -89,7 +87,7 @@
                     poster: '/testscreen.png'
                 }));
                 
-                // console.log(playlistItems);
+                console.log(playlistItems);
                 player.playlist(playlistItems, 0);
                 player.playlistUi();
                 player.playlist.autoadvance(0);
